@@ -17,7 +17,11 @@ import java.util.Set;
  * Implement Lombok annotations to eliminate boilerplate code.
  */
 
+@Entity
 public class Student {
+
+    @Id
+    private int id;
 
 
     }

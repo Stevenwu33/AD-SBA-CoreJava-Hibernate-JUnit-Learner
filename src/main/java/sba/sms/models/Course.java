@@ -15,6 +15,11 @@ import java.util.Set;
  * of the relationship. Implement Lombok annotations to eliminate boilerplate code.
  */
 
+@Entity
 public class Course {
+
+    @Id
+    private int id;
+
 
 }
