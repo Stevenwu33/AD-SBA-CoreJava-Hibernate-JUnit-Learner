@@ -18,6 +18,10 @@ import java.util.Set;
  */
 
 @Entity
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class Student {
 
     @Id
