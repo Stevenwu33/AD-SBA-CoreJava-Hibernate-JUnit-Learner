@@ -59,7 +59,7 @@ class StudentServiceTest {
 
 
     @Test
-    void getAllStudents() {
+    void getAllStudents() {  //make sure to create fake data when testing or else it won't know where to pull students
 
         Student student = new Student("test@email.com", "Test Student", "password123");
         studentService.createStudent(student);
