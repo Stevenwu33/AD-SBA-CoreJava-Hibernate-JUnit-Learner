@@ -60,7 +60,7 @@ public class App {
                         System.out.printf("%-2s | %-20s | %s%n", "ID", "Course", "Instructor");
                         if (courseList.isEmpty()) System.out.printf("No courses to view%n");
                         for (Course course : courseList) {
-                            System.out.printf("%-2d | %-20s | %s%n", course.getId(), course.getName(), course.getInstructor());
+                            System.out.printf("%-2d | %-20s | %s%n", course.getCourseId(), course.getName(), course.getInstructor());
                         }
                         System.out.print("select course #: ");
                         int courseId = input.nextInt();
@@ -87,7 +87,7 @@ public class App {
         List<Course> userCourses = studentService.getStudentCourses(email);
         if (userCourses.isEmpty()) System.out.printf("No courses to view%n");
         for (Course course : userCourses) {
-            System.out.printf("%-2d | %-20s | %s%n", course.getId(), course.getName(), course.getInstructor());
+            System.out.printf("%-2d | %-20s | %s%n", course.getCourseId(), course.getName(), course.getInstructor());
         }
     }
 }

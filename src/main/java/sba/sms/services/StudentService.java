@@ -21,6 +21,72 @@ import java.util.List;
  * generate a logger file.
  */
 
-public class StudentService {
+@Log
+public class StudentService implements StudentI {
 
+
+    @Override
+    public List<Student> getAllStudents() {
+
+        try (Session session = HibernateUtil.getSessionFactory().openSession()){
+            return session.createQuery("from Student", Student.class).list();
+        }
+
+
+    }
+
+    @Override
+    public void createStudent(Student student) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            Transaction transaction = session.beginTransaction();
+            session.persist(student);
+            transaction.commit();
+        }
+
+    }
+
+    @Override
+    public Student getStudentByEmail(String email) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()){
+            return session.createQuery(
+                            "SELECT s FROM Student s LEFT JOIN FETCH s.courses  WHERE s.email = :email", Student.class)
+                    .setParameter("email",email)
+                    .uniqueResult();
+        }
+    }
+
+    @Override
+    public boolean validateStudent(String email, String password) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            Student student = session.get(Student.class, email);
+            if (student != null && student.getPassword().equals(password)){
+                return true;
+            }
+        }
+            return false;
+    }
+
+    @Override
+    public void registerStudentToCourse(String email, int courseId) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            Transaction transaction = session.beginTransaction();
+            Student student = session.get(Student.class, email);
+            Course course = session.get(Course.class, courseId);
+            if (student != null && !student.getCourses().contains(course)){
+                student.getCourses().add(course);
+                session.merge(student);
+            }
+            transaction.commit();
+        }
+    }
+
+    @Override
+    public List<Course> getStudentCourses(String email) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()){
+            return session.createQuery(
+                    "SELECT c FROM Student s JOIN s.courses c WHERE s.email = :email", Course.class)
+                    .setParameter("email",email)
+                    .list();
+        }
+    }
 }

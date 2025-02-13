@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -20,15 +21,58 @@ import java.util.Set;
 @Entity
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
+@Table(name = "Student")
 public class Student {
 
     @Id
-    private int id;
+    @Column(name = "Student_Email")
+    private String email;
 
+    @Column(name = "Name")
+    private String name;
 
+    @Column(name = "Password")
+    private String password;
+
+    @ManyToMany(cascade = {CascadeType.PERSIST}, fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "Student_Course",
+            joinColumns = @JoinColumn(name = "Student_Email"),
+            inverseJoinColumns = @JoinColumn(name = "CourseID")
+    )
+    private Set<Course> courses = new HashSet<>();
+
+    public Student(String email, String name, String password) {
+        this.email = email;
+        this.name = name;
+        this.password = password;
     }
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        Student student = (Student) o;
+        return Objects.equals(email, student.email) && Objects.equals(name, student.name) && Objects.equals(password, student.password) && Objects.equals(courses, student.courses);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(email, name, password, courses);
+    }
+
+    @Override
+    public String toString() {
+        return "Student{" +
+                "email='" + email + '\'' +
+                ", name='" + name + '\'' +
+                ", password='" + password + '\'' +
+                ", courses=" + courses +
+                '}';
+    }
+}
 
 
 
